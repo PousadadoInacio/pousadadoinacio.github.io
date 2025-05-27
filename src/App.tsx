@@ -8,6 +8,7 @@ import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+const basename = "/"; // Sempre use "/" para GitHub Pages na raiz
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
