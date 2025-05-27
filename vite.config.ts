@@ -5,6 +5,12 @@ import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
   base: '/',
+ build: {
+    outDir: 'dist',
+    assetsDir: 'assets',  // Organiza melhor os arquivos estáticos
+    emptyOutDir: true,
+    sourcemap: false      // Desative para produção
+    },
   server: {
     host: "::",
     port: 8080,
