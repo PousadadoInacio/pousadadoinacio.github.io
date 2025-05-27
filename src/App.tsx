@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,15 +9,12 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Use o basename correto para GitHub Pages
-const basename = import.meta.env.DEV ? "/" : "/pousadadoinacio.github.io/";
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={basename}>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/blog" element={<Blog />} />
