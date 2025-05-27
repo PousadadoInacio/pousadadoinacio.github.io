@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +20,20 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const logoPath = `${import.meta.env.BASE_URL}logo.png`;
+
+  const handleScrollToSection = (sectionId: string) => {
+    if (location.pathname !== "/") {
+      // Se não estiver na página inicial, navegar primeiro
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      // Se já estiver na página inicial, apenas scroll
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav
@@ -60,10 +76,13 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
-          <NavLinks isScrolled={isScrolled} />
+          <NavLinks 
+            isScrolled={isScrolled} 
+            onScrollToSection={handleScrollToSection}
+          />
           <Button
             className="btn-primary"
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => handleScrollToSection('contact')}
           >
             Reservar
           </Button>
@@ -74,13 +93,14 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white py-4 px-4 shadow-lg">
           <div className="flex flex-col space-y-4">
-            <NavLinks isScrolled={true} onClick={() => setIsMenuOpen(false)} />
+            <NavLinks 
+              isScrolled={true} 
+              onScrollToSection={handleScrollToSection}
+              onClick={() => setIsMenuOpen(false)}
+            />
             <Button
               className="btn-primary w-full"
-              onClick={() => {
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                setIsMenuOpen(false);
-              }}
+              onClick={() => handleScrollToSection('contact')}
             >
               Reservar
             </Button>
@@ -93,17 +113,18 @@ const Navbar = () => {
 
 interface NavLinksProps {
   isScrolled: boolean;
+  onScrollToSection: (sectionId: string) => void;
   onClick?: () => void;
 }
 
-const NavLinks = ({ isScrolled, onClick }: NavLinksProps) => {
+const NavLinks = ({ isScrolled, onScrollToSection, onClick }: NavLinksProps) => {
   const links = [
     { label: "Início", to: "/" },
     { label: "Blog", to: "/blog" },
-    { label: "Galeria", href: "#gallery" },
-    { label: "Acomodações", href: "#accommodations" },
-    { label: "Atividades", href: "#activities" },
-    { label: "Contato", href: "#contact" },
+    { label: "Galeria", sectionId: "gallery" },
+    { label: "Acomodações", sectionId: "accommodations" },
+    { label: "Atividades", sectionId: "activities" },
+    { label: "Contato", sectionId: "contact" },
   ];
 
   return links.map((link) =>
@@ -119,16 +140,15 @@ const NavLinks = ({ isScrolled, onClick }: NavLinksProps) => {
         {link.label}
       </Link>
     ) : (
-      <a
+      <button
         key={link.label}
-        href={link.href}
+        onClick={() => onScrollToSection(link.sectionId!)}
         className={`font-medium transition-colors hover:text-pousada-brown ${
           isScrolled ? "text-gray-800" : "text-yellow-400"
         }`}
-        onClick={onClick}
       >
         {link.label}
-      </a>
+      </button>
     )
   );
 };
