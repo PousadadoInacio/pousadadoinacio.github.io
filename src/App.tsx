@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 // Use o basename correto para GitHub Pages
-const basename = import.meta.env.DEV ? "/" : "/beira-rio-pantanal-view/";
+const basename = import.meta.env.DEV ? "/" : "/pousadadoinacio.github.io/";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
