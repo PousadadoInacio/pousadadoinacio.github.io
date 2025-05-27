@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/beira-rio-pantanal-view/", // Definindo o caminho base correto para o repositório GitHub
+  base: "/", // Definindo o caminho base correto para o repositório GitHub
   server: {
     host: "::",
     port: 8080,
