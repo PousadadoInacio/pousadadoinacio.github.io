@@ -1,19 +1,22 @@
-
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Permissão ESSENCIAL para push no gh-pages
+      pages: write     # Necessário para GitHub Pages
+      id-token: write  # Necessário para autenticação
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Versão mais recente
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,10 +31,12 @@ jobs:
         run: npm run build
 
       - name: Create .nojekyll file
-        run: touch dist/.nojekyll
+        run: touch dist/.nojekyll && echo "Created .nojekyll"
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # The folder the action should deploy
-          branch: gh-pages # The branch the action should deploy to
+          folder: dist
+          branch: gh-pages
+          clean: true  # Remove arquivos antigos
+          token: ${{ secrets.GITHUB_TOKEN }}  # Explicito é melhor
