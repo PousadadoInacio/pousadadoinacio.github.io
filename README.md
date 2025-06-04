@@ -25,4 +25,3 @@ Este projeto foi construído com:
 - React  
 - shadcn-ui  
 - Tailwind CSS
-- Node
